@@ -543,6 +543,23 @@ impl LayerContent {
             LayerContent::Smart(_) => "Smart Object",
         }
     }
+
+    /// Human-readable layer kind with its English indefinite article.
+    ///
+    /// Keep this separate from [`Self::kind_name`]: callers that serialize or
+    /// compare the kind need the bare noun, while diagnostics need grammatical
+    /// prose.
+    pub fn kind_name_with_article(&self) -> &'static str {
+        match self {
+            LayerContent::Adjustment(_) => "an Adjustment",
+            LayerContent::Raster(_) => "a Pixel",
+            LayerContent::Group(_) => "a Group",
+            LayerContent::Fill(_) => "a Fill",
+            LayerContent::Text(_) => "a Type",
+            LayerContent::Shape(_) => "a Shape",
+            LayerContent::Smart(_) => "a Smart Object",
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]

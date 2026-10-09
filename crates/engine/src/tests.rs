@@ -230,6 +230,18 @@ fn new_fill_layer_with_a_missing_path_fails_without_a_layer() {
 }
 
 #[test]
+fn adjustment_layer_diagnostics_use_an_indefinite_article() {
+    let mut s = session_with_doc();
+    s.execute("layer.newAdjustmentLayer.curves", json!({})).unwrap();
+
+    for id in ["filter.blur.gaussianBlur", "image.adjustments.equalize", "edit.clear"] {
+        let reason = s.disabled_reason(id).unwrap_or_else(|| panic!("{id} should be disabled"));
+        assert!(reason.contains("an Adjustment layer"), "{id}: {reason}");
+        assert!(!reason.contains("a Adjustment layer"), "{id}: {reason}");
+    }
+}
+
+#[test]
 fn every_adjustment_command_runs() {
     let mut s = session_with_doc();
     let ids: Vec<&str> =
